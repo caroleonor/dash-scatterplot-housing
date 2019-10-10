@@ -8,15 +8,16 @@ import pandas as pd
 
 tabtitle = 'DC Housing'
 myheading='Analysis of housing prices in Washington DC'
-neighborhood='Columbia Heights'
+neighborhood='Georgetown'
 color1='#04F9E6'
 color2='#1B03B1'
 sourceurl = 'https://www.kaggle.com/christophercorrea/dc-residential-properties/'
-githublink = 'https://github.com/austinlasseter/dash-scatterplot-housing'
+githublink = 'https://github.com/caroleonor/dash-scatterplot-housing/edit/master/app.py'
 
-########### Prepare the dataframe
-df = pd.read_csv('DC_Properties.csv')
-df=df[df['ASSESSMENT_NBHD']==neighborhood]
+########### Prepare the dataframe 
+#filter data before analysis, because it won't cluster
+df = pd.read_csv('DC_Properties.csv') #if it's in the folder, just put the file name without path
+df=df[df['ASSESSMENT_NBHD']==neighborhood] #assign df to df, [[]] means it's a filter
 df=df[(df['PRICE']<=1000000) & (df['PRICE']>=10000)]
 df=df[df['LANDAREA']<4000]
 df=df[df['PRICE']<900000]
@@ -29,13 +30,14 @@ trace = go.Scatter(
     mode = 'markers',
     marker=dict(
         size=8,
-        color = df['BEDRM'], # set color equal to a third variable
-        colorscale=[color1, color2],
+        color = df['BEDRM'], # set color equal to a third variable, this is the 3rd variable 
+        colorscale=[color1, color2], #this is the continueity variable, default will be grey to black if don't set up color 
         colorbar=dict(title='Bedrooms'),
         showscale=True
     )
 )
 
+#trace and layout if the user can select the neighborhood 
 data = [trace]
 layout = go.Layout(
     title = f'Larger homes cost more in {neighborhood}!', # Graph title
